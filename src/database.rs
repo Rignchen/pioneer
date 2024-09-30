@@ -4,3 +4,4 @@ pub enum DatabaseType {
     Sqlite,
     Mysql,
 }
+

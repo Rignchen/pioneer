@@ -16,3 +16,4 @@ structstruck::strike! {
         pub password: Option<String>,
     }
 }
+
