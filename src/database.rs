@@ -1,21 +1,23 @@
 use clap::Parser;
 
-#[derive(Parser, Debug)]
-pub enum DatabaseType {
-    Postgres {
-        host: String,
-        port: u16,
-        user: String,
-        password: String,
-    },
-    Sqlite {
-        file: String,
-    },
-    Mysql {
-        host: String,
-        port: u16,
-        user: String,
-        password: String,
-    },
+structstruck::strike! {
+    #[strikethrough[derive(Parser, Debug)]]
+    pub enum DatabaseType {
+        Postgres(struct Postgres {
+            pub host: String,
+            pub port: u16,
+            user: String,
+            password: String,
+        }),
+        Sqlite(struct Sqlite {
+            pub file: String,
+        }),
+        Mysql(struct Mysql {
+            pub host: String,
+            pub port: u16,
+            user: String,
+            password: String,
+        }),
+    }
 }
 
