@@ -21,3 +21,28 @@ structstruck::strike! {
     }
 }
 
+impl DatabaseType {
+    fn get_url(&self) -> String {
+        match self {
+            DatabaseType::Postgres(Postgres {
+                host,
+                port,
+                user,
+                password,
+            }) => {
+                format!("postgres://{}:{}@{}:{}/", user, password, host, port)
+            }
+            DatabaseType::Sqlite(Sqlite { file }) => {
+                format!("sqlite://{}", file)
+            }
+            DatabaseType::Mysql(Mysql {
+                host,
+                port,
+                user,
+                password,
+            }) => {
+                format!("mysql://{}:{}@{}:{}/", user, password, host, port)
+            }
+        }
+    }
+}

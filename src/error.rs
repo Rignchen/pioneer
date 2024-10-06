@@ -7,7 +7,7 @@ pub enum PioneerError {
 }
 
 /// Result type which wither take a type T or a PioneerError
-pub type DepotResult<T> = std::result::Result<T, PioneerError>;
+pub type PioneerResult<T> = std::result::Result<T, PioneerError>;
 
 /// Function to handle the different types of errors that can occur in the application
 pub fn handle_error(error: PioneerError) {
