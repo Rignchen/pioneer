@@ -1,7 +1,11 @@
 use clap::Parser;
+use crate::error::{
+    PioneerResult,
+    PioneerError,
+};
 
 structstruck::strike! {
-    #[strikethrough[derive(Parser, Debug)]]
+    #[strikethrough[derive(Parser, Debug, Clone)]]
     pub enum DatabaseType {
         Postgres(struct Postgres {
             pub host: String,
@@ -19,6 +23,12 @@ structstruck::strike! {
             password: String,
         }),
     }
+}
+
+pub enum DatabaseConnection {
+    Postgres(postgres::Client),
+    Sqlite(sqlite::Connection),
+    Mysql(mysql::Pool),
 }
 
 impl DatabaseType {
@@ -43,6 +53,26 @@ impl DatabaseType {
             }) => {
                 format!("mysql://{}:{}@{}:{}/", user, password, host, port)
             }
+        }
+    }
+    pub fn connect(&self) -> PioneerResult<DatabaseConnection> {
+        let url = self.get_url();
+        match self {
+            DatabaseType::Postgres(_) =>
+                match postgres::Client::connect(&url, postgres::NoTls) {
+                    Ok(client) => Ok(DatabaseConnection::Postgres(client)),
+                    Err(_) => Err(PioneerError::ConnectionError(self.clone())),
+                }
+            DatabaseType::Sqlite(_) =>
+                match sqlite::Connection::open(&url) {
+                    Ok(client) => Ok(DatabaseConnection::Sqlite(client)),
+                    Err(_) => Err(PioneerError::ConnectionError(self.clone())),
+                }
+            DatabaseType::Mysql(_) =>
+                match mysql::Pool::new(url.as_str()) {
+                    Ok(client) => Ok(DatabaseConnection::Mysql(client)),
+                    Err(_) => Err(PioneerError::ConnectionError(self.clone())),
+                }
         }
     }
 }
