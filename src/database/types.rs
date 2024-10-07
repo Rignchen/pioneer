@@ -1,7 +1,10 @@
 use clap::Parser;
-use crate::error::{
-    PioneerResult,
-    PioneerError,
+use crate::{
+    error::{
+        PioneerResult,
+        PioneerError,
+    },
+    database::connection::DatabaseConnection,
 };
 
 structstruck::strike! {
@@ -23,12 +26,6 @@ structstruck::strike! {
             password: String,
         }),
     }
-}
-
-pub enum DatabaseConnection {
-    Postgres(postgres::Client),
-    Sqlite(sqlite::Connection),
-    Mysql(mysql::Pool),
 }
 
 impl DatabaseType {

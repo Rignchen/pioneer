@@ -1,4 +1,4 @@
-use crate::database::*;
+use crate::database::types::*;
 use std::process::exit;
 
 /// Enum to represent the different types of errors that can occur in the application

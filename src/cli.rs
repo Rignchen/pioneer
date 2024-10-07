@@ -1,4 +1,4 @@
-use crate::database::DatabaseType;
+use crate::database::types::DatabaseType;
 use clap::Parser;
 
 #[derive(Parser, Debug)]
