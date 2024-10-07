@@ -5,6 +5,14 @@ use pioneer::{
 };
 
 fn main() {
+    match run() {
+        Ok(_) => (),
+        Err(e) => handle_error(e),
+    }
+}
+
+fn run() -> Result<(), PioneerError> {
     let args = Args::parse();
-    handle_error(PioneerError::ConnectionError(args.db));
+    args.db.connect()?;
+    Ok(())
 }
