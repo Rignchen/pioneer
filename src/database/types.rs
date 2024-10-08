@@ -3,6 +3,7 @@ use crate::{
     error::{
         PioneerResult,
         PioneerError,
+        PioneerErrorType,
     },
     database::connection::DatabaseConnection,
 };
@@ -58,17 +59,26 @@ impl DatabaseType {
             DatabaseType::Postgres(_) =>
                 match postgres::Client::connect(&url, postgres::NoTls) {
                     Ok(client) => Ok(DatabaseConnection::Postgres(client)),
-                    Err(_) => Err(PioneerError::ConnectionError(self.clone())),
+                    Err(e) => Err(PioneerError {
+                        _pioneer_error: PioneerErrorType::ConnectionError(self.clone()),
+                        message: e.to_string(),
+                    }),
                 }
             DatabaseType::Sqlite(_) =>
                 match sqlite::Connection::open(&url) {
                     Ok(client) => Ok(DatabaseConnection::Sqlite(client)),
-                    Err(_) => Err(PioneerError::ConnectionError(self.clone())),
+                    Err(e) => Err(PioneerError {
+                        _pioneer_error: PioneerErrorType::ConnectionError(self.clone()),
+                        message: e.to_string(),
+                    }),
                 }
             DatabaseType::Mysql(_) =>
                 match mysql::Pool::new(url.as_str()) {
                     Ok(client) => Ok(DatabaseConnection::Mysql(client)),
-                    Err(_) => Err(PioneerError::ConnectionError(self.clone())),
+                    Err(e) => Err(PioneerError {
+                        _pioneer_error: PioneerErrorType::ConnectionError(self.clone()),
+                        message: e.to_string(),
+                    }),
                 }
         }
     }
