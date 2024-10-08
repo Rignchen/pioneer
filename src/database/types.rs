@@ -55,31 +55,28 @@ impl DatabaseType {
     }
     pub fn connect(&self) -> PioneerResult<DatabaseConnection> {
         let url = self.get_url();
-        match self {
+        match match self {
             DatabaseType::Postgres(_) =>
                 match postgres::Client::connect(&url, postgres::NoTls) {
                     Ok(client) => Ok(DatabaseConnection::Postgres(client)),
-                    Err(e) => Err(PioneerError {
-                        _pioneer_error: PioneerErrorType::ConnectionError(self.clone()),
-                        message: e.to_string(),
-                    }),
+                    Err(e) => Err(e.to_string()),
                 }
             DatabaseType::Sqlite(_) =>
                 match sqlite::Connection::open(&url) {
                     Ok(client) => Ok(DatabaseConnection::Sqlite(client)),
-                    Err(e) => Err(PioneerError {
-                        _pioneer_error: PioneerErrorType::ConnectionError(self.clone()),
-                        message: e.to_string(),
-                    }),
+                    Err(e) => Err(e.to_string()),
                 }
             DatabaseType::Mysql(_) =>
                 match mysql::Pool::new(url.as_str()) {
                     Ok(client) => Ok(DatabaseConnection::Mysql(client)),
-                    Err(e) => Err(PioneerError {
-                        _pioneer_error: PioneerErrorType::ConnectionError(self.clone()),
-                        message: e.to_string(),
-                    }),
+                    Err(e) => Err(e.to_string()),
                 }
+        } {
+            Ok(connection) => Ok(connection),
+            Err(e) => Err(PioneerError {
+                _pioneer_error: PioneerErrorType::ConnectionError(self.clone()),
+                message: e,
+            }),
         }
     }
 }
