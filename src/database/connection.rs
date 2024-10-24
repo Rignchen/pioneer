@@ -17,6 +17,15 @@ impl DatabaseConnection {
                     .unwrap().iter()
                     .map(|row| row.get(0)).collect()
             }
+            DatabaseConnection::Sqlite(ref mut conn) => {
+                // SELECT name FROM sqlite_master WHERE type='table'
+                let mut tables: Vec<String> = Vec::new();
+                conn.iterate("SELECT name FROM sqlite_master WHERE type='table'", |row| {
+                    tables.push((*row.get(0).unwrap()).1.unwrap().to_string());
+                    true
+                });
+                tables
+            }
             _ => todo!()
         }
     }
