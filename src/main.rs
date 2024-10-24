@@ -13,6 +13,7 @@ fn main() {
 
 fn run() -> Result<(), PioneerError> {
     let args = Args::parse();
-    args.db.connect()?;
+    let mut connection = args.db.connect()?;
+    println!("{:?}", connection.get_all_tables(None));
     Ok(())
 }
