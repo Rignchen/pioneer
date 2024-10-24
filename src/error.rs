@@ -20,13 +20,22 @@ pub fn handle_error(error: PioneerError) {
         PioneerErrorType::ConnectionError(db) => {
             match db {
                 DatabaseType::Postgres(Postgres { host, port, .. }) => {
-                    eprintln!("Error connecting to Postgres database at {}:{} ({})", host, port, error.message);
+                    eprintln!(
+                        "Error connecting to Postgres database at {}:{} ({})",
+                        host, port, error.message
+                    );
                 }
                 DatabaseType::Sqlite(Sqlite { file }) => {
-                    eprintln!("Error connecting to Sqlite database at {} ({})", file, error.message);
+                    eprintln!(
+                        "Error connecting to Sqlite database at {} ({})",
+                        file, error.message
+                    );
                 }
                 DatabaseType::Mysql(Mysql { host, port, .. }) => {
-                    eprintln!("Error connecting to Mysql database at {}:{} ({})", host, port, error.message);
+                    eprintln!(
+                        "Error connecting to Mysql database at {}:{} ({})",
+                        host, port, error.message
+                    );
                 }
             }
             exit(1);
