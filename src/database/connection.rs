@@ -3,4 +3,3 @@ pub enum DatabaseConnection {
     Sqlite(sqlite::Connection),
     Mysql(mysql::Pool),
 }
-

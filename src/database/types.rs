@@ -36,9 +36,7 @@ impl DatabaseType {
             }) => {
                 format!("postgres://{}:{}@{}:{}/", user, password, host, port)
             }
-            DatabaseType::Sqlite(Sqlite { file }) => {
-                format!("{}", file)
-            }
+            DatabaseType::Sqlite(Sqlite { file }) => file.to_string(),
             DatabaseType::Mysql(Mysql {
                 host,
                 port,
