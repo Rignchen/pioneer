@@ -1,8 +1,10 @@
+pub mod cli;
+pub mod database;
+pub mod error;
+
 use clap::Parser;
-use pioneer::{
-    cli::Args,
-    error::{handle_error, PioneerError},
-};
+use cli::Args;
+use error::{handle_error, PioneerError};
 
 fn main() {
     match run() {
